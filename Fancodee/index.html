@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fancode WEB</title>
+  <title>Fancode Â· animated</title>
   <link rel="shortcut icon" href="https://fancode.cricsters.io/fancode.webp" />
   <!-- Tailwind + icons -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ultra light â€” no backdrop, minimal animations */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #0a0f1c;
@@ -18,29 +17,41 @@
       line-height: 1.5;
     }
 
-    /* spacious card - increased padding, larger height */
+    /* spacious card with smooth transitions */
     .match-tile {
       background: #131d2f;
-      border-radius: 28px;
+      border-radius: 32px;
       border: 1px solid #253247;
-      transition: border 0.15s, background 0.15s;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.8);
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s, box-shadow 0.3s, background 0.2s;
+      will-change: transform;
     }
     .match-tile:hover {
       background: #17253b;
       border-color: #3b82f6;
+      transform: scale(1.02) translateY(-4px);
+      box-shadow: 0 25px 40px -8px #1e3a8a40;
     }
 
-    /* bigger image */
-    .match-img-spacious {
-      height: 210px;            /* increased height */
-      width: 100%;
-      object-fit: cover;
+    /* image zoom on hover */
+    .img-wrapper {
+      overflow: hidden;
       background: #0f1a2c;
+      height: 210px;
+      position: relative;
+    }
+    .match-img-spacious {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
+      transition: transform 0.4s ease;
+    }
+    .match-tile:hover .match-img-spacious {
+      transform: scale(1.05);
     }
 
     .live-badge-flat {
@@ -54,13 +65,18 @@
       align-items: center;
       gap: 0.4rem;
       box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4);
+      animation: pulse-live 1.8s infinite;
+    }
+    @keyframes pulse-live {
+      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
     }
 
-    /* watch button only for live */
     .btn-watch-live {
       background: #2563eb;
       border-radius: 50px;
-      padding: 0.9rem 1rem;      /* bigger tap area */
+      padding: 0.9rem 1rem;
       font-weight: 700;
       font-size: 1rem;
       color: white;
@@ -68,12 +84,17 @@
       align-items: center;
       justify-content: center;
       gap: 0.6rem;
-      transition: background 0.1s;
+      transition: all 0.2s;
       width: 100%;
       border: none;
       margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-watch-live:hover { background: #1d4ed8; }
+    .btn-watch-live:hover { background: #1d4ed8; transform: scale(1.01); }
+    .btn-watch-live:active { transform: scale(0.98); }
+    .btn-watch-live i { transition: transform 0.2s; }
+    .btn-watch-live:hover i { transform: translateX(4px); }
 
     .btn-upcoming {
       background: transparent;
@@ -90,20 +111,22 @@
       border: 1px solid #334155;
       margin-top: 0.5rem;
       pointer-events: none;
+      opacity: 0.8;
     }
 
+    /* skeleton shimmer animation */
     .skeleton-spacious {
       background: linear-gradient(90deg, #1b2538 25%, #263449 50%, #1b2538 75%);
       background-size: 200% 100%;
-      animation: load 1.4s infinite linear;
-      border-radius: 28px;
-      min-height: 420px;        /* taller skeleton */
+      animation: shimmer 1.5s infinite linear;
+      border-radius: 32px;
+      min-height: 430px;
     }
-    @keyframes load { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     .divider-simple { height: 1px; background: #1f2a3c; width: 100%; }
 
-    /* popup overlay â€“ hidden by default */
+    /* popup overlay â€“ hidden by default + entrance animation */
     #popup-24h {
       display: none;
       position: fixed;
@@ -113,6 +136,7 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      animation: fadeIn 0.3s ease;
     }
     .popup-card {
       background: #152436;
@@ -123,47 +147,80 @@
       border: 1px solid #2e405b;
       box-shadow: 0 30px 50px -10px black;
       text-align: center;
+      transform: scale(0.95);
+      animation: popupEntrance 0.3s 0.1s forwards;
+      opacity: 0;
     }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popupEntrance {
+      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* header subtle float */
+    .header-pill {
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: softFloat 4s infinite alternate ease-in-out;
+    }
+    @keyframes softFloat {
+      0% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,40,100,0.3); }
+      100% { transform: translateY(-3px); box-shadow: 0 12px 24px -8px #1e3a8a; }
+    }
+
+    /* loading dots for empty state (optional) */
+    .pulse-dot {
+      width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;
+      display: inline-block; margin: 0 2px;
+      animation: pulse-dot 1.2s infinite;
+    }
+    @keyframes pulse-dot { 0%,100%{ opacity: 0.3; transform: scale(1); } 50%{ opacity: 1; transform: scale(1.3); } }
+
+    /* line clamp */
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
 <body class="p-5 max-w-7xl mx-auto">
 
-  <!-- popup (24h snooze) -->
+  <!-- popup (24h snooze) with entrance animation -->
   <div id="popup-24h">
     <div class="popup-card">
-      <div class="w-16 h-16 mx-auto bg-blue-600/30 rounded-full flex items-center justify-center text-3xl mb-4">
+      <div class="w-16 h-16 mx-auto bg-blue-600/30 rounded-full flex items-center justify-center text-3xl mb-4 animate-pulse">
         <i class="fas fa-bolt text-blue-400"></i>
       </div>
       <h2 class="text-2xl font-bold text-white mb-2">Join Live Alert</h2>
       <p class="text-gray-300 text-sm mb-6">Get Instant Notifications For Every Live Match. No Spam, Only Live Events.</p>
       <div class="flex flex-col gap-3">
-        <a href="https://t.me/+e3-eAje291cxNGNl" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 text-base"><i class="fab fa-telegram-plane"></i> Join Telegram</a>
-        <button id="close-popup-btn" class="bg-transparent border border-gray-600 text-gray-300 py-3 rounded-full text-sm hover:bg-gray-800">Already Joined</button>
+        <a href="https://t.me/+e3-eAje291cxNGNl" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 text-base transition-all hover:gap-3"><i class="fab fa-telegram-plane"></i> Join Telegram</a>
+        <button id="close-popup-btn" class="bg-transparent border border-gray-600 text-gray-300 py-3 rounded-full text-sm hover:bg-gray-800 transition">Already Joined</button>
       </div>
     </div>
   </div>
 
-  <!-- header: Fancode centered with credit -->
+  <!-- header: with animation -->
   <div class="text-center mt-4 mb-8">
-    <div class="inline-flex items-center justify-center gap-3 bg-[#131d2f] py-3 px-7 rounded-full border border-blue-900/50">
-      <i class="fas fa-bolt text-blue-500 text-xl"></i>
+    <div class="inline-flex items-center justify-center gap-3 bg-[#131d2f] py-3 px-7 rounded-full border border-blue-900/50 header-pill">
+      <i class="fas fa-bolt text-blue-500 text-xl animate-bounce" style="animation-duration: 1.8s;"></i>
       <span class="text-3xl font-black tracking-tight text-white">FANCODE</span>
     </div>
-    <p class="text-gray-500 text-sm mt-3 tracking-wide">WEB BY MATCHES LINKS</p>
+    <p class="text-gray-500 text-sm mt-3 tracking-wide flex items-center justify-center gap-2">
+      <span class="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></span>
+      WEB BY MATCHES LINKS
+      <span class="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></span>
+    </p>
   </div>
 
   <!-- main grid â€“ spacious cards -->
   <div id="matches-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-    <!-- taller skeletons -->
+    <!-- taller skeletons with shimmer -->
     <div class="skeleton-spacious"></div>
     <div class="skeleton-spacious hidden sm:block"></div>
     <div class="skeleton-spacious hidden lg:block"></div>
   </div>
 
-  <!-- divider footer -->
-  <div class="mt-16 flex items-center gap-3 text-xs text-gray-600">
+  <!-- divider footer with subtle fade -->
+  <div class="mt-16 flex items-center gap-3 text-xs text-gray-600 opacity-80 hover:opacity-100 transition">
     <div class="divider-simple"></div>
-    <span>Â© fancode Â· clean & fast</span>
+    <span>Â© fancode Â· animated edition</span>
     <div class="divider-simple"></div>
   </div>
 
@@ -171,11 +228,11 @@
     (function() {
       // anti iframe
       if (window.self !== window.top) {
-        document.body.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0f1c"><div style="background:#151f2f;padding:2rem;border-radius:32px;"><i class="fas fa-shield-alt text-4xl text-red-400"></i><p style="margin-top:1rem;">direct access only</p></div></div>`;
+        document.body.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0f1c;animation:fadeIn 0.3s"><div style="background:#151f2f;padding:2rem;border-radius:32px;"><i class="fas fa-shield-alt text-4xl text-red-400"></i><p style="margin-top:1rem;">direct access only</p></div></div>`;
         throw new Error('frame blocked');
       }
 
-      // ---------- 24H POPUP LOGIC ----------
+      // ---------- 24H POPUP LOGIC (with animation) ----------
       (function setupPopup() {
         const popup = document.getElementById('popup-24h');
         const closeBtn = document.getElementById('close-popup-btn');
@@ -183,7 +240,7 @@
 
         function shouldShowPopup() {
           const lastClosed = localStorage.getItem(POPUP_STORAGE_KEY);
-          if (!lastClosed) return true; // never closed
+          if (!lastClosed) return true;
           const last = parseInt(lastClosed, 10);
           if (isNaN(last)) return true;
           const now = Date.now();
@@ -193,16 +250,17 @@
 
         function markPopupClosed() {
           localStorage.setItem(POPUP_STORAGE_KEY, Date.now().toString());
-          popup.style.display = 'none';
+          // optional exit animation
+          popup.style.animation = 'fadeIn 0.2s reverse';
+          setTimeout(() => { popup.style.display = 'none'; }, 150);
         }
 
-        // show popup if needed after a slight delay (to not block rendering)
         window.addEventListener('load', () => {
           setTimeout(() => {
             if (shouldShowPopup()) {
               popup.style.display = 'flex';
             }
-          }, 1800); // gentle delay
+          }, 2000); // gentle delay after load
         });
 
         if (closeBtn) {
@@ -211,12 +269,9 @@
             markPopupClosed();
           });
         }
-
-        // if user clicks outside popup-card? optional: we can close, but we keep only button to avoid accident.
-        // but clicking overlay does nothing â€“ we only close via button to respect 24h.
       })();
 
-      // ---------- MATCHES RENDERING ----------
+      // ---------- MATCHES RENDERING with dynamic animations ----------
       const container = document.getElementById('matches-container');
       const DATA_URL = 'https://raw.githubusercontent.com/Jitendra-unatti/fancode/refs/heads/main/data/fancode.json';
       const WATCH_BASE = 'https://innings.pages.dev/Fancodee?id=';
@@ -249,17 +304,17 @@
           const matches = (data && Array.isArray(data.matches)) ? data.matches : [];
           if (matches.length === 0) {
             container.innerHTML = `
-              <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl">
+              <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl animate__animated" style="animation: fadeIn 0.5s;">
                 <i class="fas fa-calendar-times text-5xl text-gray-500 mb-5"></i>
                 <p class="text-2xl font-light text-gray-300">no live matches</p>
-                <p class="text-gray-500 text-sm mt-2">check schedule later</p>
+                <p class="text-gray-500 text-sm mt-2">check schedule later Â· <span class="inline-flex"><span class="pulse-dot"></span><span class="pulse-dot" style="animation-delay:0.2s"></span><span class="pulse-dot" style="animation-delay:0.4s"></span></span></p>
               </div>`;
             return;
           }
 
           const fragment = document.createDocumentFragment();
 
-          matches.forEach(m => {
+          matches.forEach((m, index) => {
             const matchId = String(m.match_id || m.id || '');
             const isLive = (m.status || '').toUpperCase() === 'LIVE';
 
@@ -277,44 +332,46 @@
             // card â€“ spacious
             const card = document.createElement('div');
             card.className = 'match-tile';
+            // tiny staggered animation based on index (will appear gradually)
+            card.style.animation = `fadeIn 0.4s ${index * 0.05}s both`;
 
-            // image area (taller)
-            const imgDiv = document.createElement('div');
-            imgDiv.className = 'relative bg-[#0f1a2c]';
+            // image wrapper with zoom container
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'img-wrapper';
+
             const img = document.createElement('img');
             img.src = imgUrl;
             img.alt = title;
             img.loading = 'lazy';
             img.className = 'match-img-spacious';
-            imgDiv.appendChild(img);
+            imgWrapper.appendChild(img);
 
             if (isLive) {
               const badge = document.createElement('span');
               badge.className = 'live-badge-flat absolute top-4 left-4';
               badge.innerHTML = '<i class="fas fa-circle text-[0.4rem] text-white mr-1"></i>LIVE';
-              imgDiv.appendChild(badge);
+              imgWrapper.appendChild(badge);
             } else {
               const scheduled = document.createElement('span');
-              scheduled.className = 'absolute top-4 left-4 bg-black/50 text-white/80 text-[0.7rem] px-3 py-1 rounded-full';
+              scheduled.className = 'absolute top-4 left-4 bg-black/50 text-white/80 text-[0.7rem] px-3 py-1 rounded-full backdrop-blur-sm';
               scheduled.innerHTML = '<i class="far fa-calendar-alt mr-1"></i>scheduled';
-              imgDiv.appendChild(scheduled);
+              imgWrapper.appendChild(scheduled);
             }
 
-            card.appendChild(imgDiv);
+            card.appendChild(imgWrapper);
 
-            // content â€” more padding
+            // content
             const content = document.createElement('div');
             content.className = 'p-5 flex flex-col flex-1';
 
             const titleEl = document.createElement('h3');
-            titleEl.className = 'font-bold text-white text-xl leading-tight line-clamp-2'; // bigger font
+            titleEl.className = 'font-bold text-white text-xl leading-tight line-clamp-2';
             titleEl.textContent = title;
             content.appendChild(titleEl);
 
-            // tournament & language chips
             if (tournament || lang) {
               const meta = document.createElement('div');
-              meta.className = 'flex flex-wrap gap-2 mt-3 text-sm'; // larger text
+              meta.className = 'flex flex-wrap gap-2 mt-3 text-sm';
               if (tournament) {
                 const chip = document.createElement('span');
                 chip.className = 'bg-[#1e2c40] text-gray-200 px-3 py-1 rounded-full text-xs';
@@ -340,13 +397,11 @@
             if (isLive) {
               const liveIndicator = document.createElement('div');
               liveIndicator.className = 'flex items-center text-red-400 text-sm mt-2';
-              liveIndicator.innerHTML = '<span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>LIVE Now';
+              liveIndicator.innerHTML = '<span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-ping opacity-75"></span><span class="animate-pulse">LIVE Now</span>';
               content.appendChild(liveIndicator);
             }
 
-            // button (watch only if live)
             content.appendChild(getActionButton(matchId, isLive));
-
             card.appendChild(content);
             fragment.appendChild(card);
           });
@@ -356,11 +411,11 @@
         .catch(err => {
           console.error(err);
           container.innerHTML = `
-            <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl">
-              <i class="fas fa-exclamation-triangle text-amber-500 text-5xl mb-5"></i>
+            <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl" style="animation: fadeIn 0.5s">
+              <i class="fas fa-exclamation-triangle text-amber-500 text-5xl mb-5 animate-pulse"></i>
               <p class="text-2xl text-gray-200">failed to load</p>
               <p class="text-gray-400 text-sm mt-2">network issue Â· try again</p>
-              <button onclick="window.location.reload()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-full text-base transition"><i class="fas fa-sync-alt mr-2"></i>reload</button>
+              <button onclick="window.location.reload()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-full text-base transition-all hover:scale-105 active:scale-95"><i class="fas fa-sync-alt mr-2"></i>reload</button>
             </div>`;
         });
     })();
