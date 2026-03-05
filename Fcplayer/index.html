@@ -33,31 +33,13 @@
       background-color: #000;
     }
 
+    /* Show default video controls */
     video::-webkit-media-controls {
       display: flex !important;
     }
 
     video::-webkit-media-controls-panel {
       display: flex !important;
-    }
-
-    /* ROTATE BUTTON */
-    .rotate-btn {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .rotate-btn:hover {
-      background: rgba(255,255,255,0.2);
     }
 
     #myLogo {
@@ -70,6 +52,7 @@
       pointer-events: none;
     }
 
+    /* Quality selector panel */
     .quality-panel {
       position: absolute;
       top: 10px;
@@ -107,6 +90,7 @@
       color: white;
     }
 
+    /* Match info panel */
     .match-info {
       position: absolute;
       bottom: 60px;
@@ -131,6 +115,7 @@
       opacity: 0.8;
     }
 
+    /* Loading indicator */
     .custom-loading {
       position: absolute;
       top: 50%;
@@ -149,6 +134,7 @@
       display: block;
     }
 
+    /* Error message */
     .error-message {
       position: absolute;
       top: 50%;
@@ -183,60 +169,283 @@
 
 <body>
   <div class="video-container">
-
     <video id="video" controls autoplay playsinline></video>
 
-    <!-- ROTATE BUTTON -->
-    <button class="rotate-btn" onclick="rotateScreen()">⟳ Rotate</button>
-
+    <!-- Quality selector panel -->
     <div id="qualityPanel" class="quality-panel" style="display: none;"></div>
 
+    <!-- Match info panel -->
     <div id="matchInfo" class="match-info" style="display: none;">
       <div id="matchTitle" class="match-title"></div>
       <div id="matchTournament" class="match-tournament"></div>
       <div id="matchStatus" class="match-tournament" style="color: #ffaa00;"></div>
     </div>
 
+    <!-- Loading indicator -->
     <div id="customLoading" class="custom-loading">Loading stream data...</div>
   </div>
 
-<script>
+  <script>
+    // Your GitHub API endpoint
+    const API_ENDPOINT = 'https://raw.githubusercontent.com/Jitendra-unatti/fancode/refs/heads/main/data/fancode.json';
 
-function rotateScreen() {
+    // Get match ID from URL
+    const queryParams = new URLSearchParams(window.location.search);
+    const matchId = queryParams.get('id');
 
-  const container = document.querySelector('.video-container');
+    let hls = null;
+    let qualityUrls = {};
+    const video = document.getElementById('video');
 
-  if (!document.fullscreenElement) {
-
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-      container.webkitRequestFullscreen();
+    // Show/hide loading indicator
+    function showLoading(message) {
+      const loader = document.getElementById('customLoading');
+      loader.textContent = message || 'Loading...';
+      loader.classList.add('visible');
     }
 
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("landscape").catch(()=>{});
+    function hideLoading() {
+      document.getElementById('customLoading').classList.remove('visible');
     }
 
-  } else {
+    function showError(message) {
+      hideLoading();
+      const existingError = document.querySelector('.error-message');
+      if (existingError) existingError.remove();
 
-    document.exitFullscreen();
-
-    if (screen.orientation && screen.orientation.unlock) {
-      screen.orientation.unlock();
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.textContent = message;
+      document.querySelector('.video-container').appendChild(errorDiv);
     }
 
-  }
+    // Fetch stream data
+    async function fetchStreamData() {
+      if (!matchId) {
+        throw new Error('No match ID provided');
+      }
 
-}
+      showLoading('Fetching stream data...');
 
-</script>
+      try {
+        const response = await fetch(API_ENDPOINT);
+        if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
 
+        const data = await response.json();
+
+        if (!data.matches) throw new Error('Invalid data format');
+
+        const matchData = data.matches.find(item => 
+          item.match_id.toString() === matchId.toString()
+        );
+
+        if (!matchData) throw new Error(`Match ID ${matchId} not found`);
+        return matchData;
+      } catch (error) {
+        console.error('API fetch error:', error);
+        throw error;
+      }
+    }
+
+    // Extract ALL quality URLs from auto_streams
+    function extractAllQualityUrls(autoStreamText) {
+      const urls = {};
+      if (!autoStreamText) return urls;
+
+      const lines = autoStreamText.split('\n');
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        if (line.includes('RESOLUTION=')) {
+          const resolutionMatch = line.match(/RESOLUTION=\d+x(\d+)/);
+          if (resolutionMatch && resolutionMatch[1]) {
+            const quality = resolutionMatch[1] + 'p';
+            // The next line should be the URL
+            const urlLine = lines[i + 1]?.trim();
+            if (urlLine && urlLine.startsWith('http')) {
+              urls[quality] = urlLine;
+            }
+          }
+        }
+      }
+
+      return urls;
+    }
+
+    // Create quality buttons
+    function createQualityButtons() {
+      const qualityPanel = document.getElementById('qualityPanel');
+      qualityPanel.innerHTML = '';
+
+      const qualities = Object.keys(qualityUrls).sort((a, b) => {
+        return parseInt(b) - parseInt(a);
+      });
+
+      qualities.forEach((quality, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'quality-btn' + (index === 0 ? ' active' : '');
+        btn.textContent = quality;
+        btn.onclick = () => {
+          document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          loadStream(qualityUrls[quality]);
+        };
+        qualityPanel.appendChild(btn);
+      });
+
+      if (qualities.length > 0) {
+        qualityPanel.style.display = 'flex';
+      }
+    }
+
+    // Attempt to play video with autoplay
+    async function attemptAutoplay() {
+      try {
+        await video.play();
+        console.log('Autoplay successful');
+      } catch (error) {
+        console.log('Autoplay failed:', error);
+        // If autoplay fails, try with muted
+        video.muted = true;
+        try {
+          await video.play();
+          console.log('Autoplay with muted successful');
+        } catch (mutedError) {
+          console.log('Even muted autoplay failed');
+        }
+      }
+    }
+
+    // Load stream using HLS.js
+    function loadStream(url) {
+      showLoading('Loading stream...');
+
+      try {
+        // Destroy existing HLS instance
+        if (hls) {
+          hls.destroy();
+          hls = null;
+        }
+
+        // Check if browser supports HLS natively
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Safari - use native HLS
+          video.src = url;
+          video.addEventListener('loadedmetadata', () => {
+            hideLoading();
+            attemptAutoplay();
+          });
+        } else if (Hls.isSupported()) {
+          // Other browsers - use HLS.js
+          hls = new Hls({
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
+            manifestLoadingTimeOut: 10000,
+            manifestLoadingMaxRetry: 3,
+            levelLoadingTimeOut: 10000,
+            levelLoadingMaxRetry: 3,
+            fragLoadingTimeOut: 20000,
+            fragLoadingMaxRetry: 3,
+            xhrSetup: function(xhr) {
+              // Add headers from the API
+              xhr.setRequestHeader('User-Agent', 'ReactNativeVideo/9.3.0 (Linux;Android 13) AndroidXMedia3/1.6.1');
+              xhr.setRequestHeader('Referer', 'https://fancode.com/');
+              xhr.setRequestHeader('Origin', 'https://fancode.com');
+            }
+          });
+
+          hls.loadSource(url);
+          hls.attachMedia(video);
+
+          hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            hideLoading();
+            attemptAutoplay();
+          });
+
+          hls.on(Hls.Events.ERROR, function(event, data) {
+            console.error('HLS error:', data);
+            if (data.fatal) {
+              switch(data.type) {
+                case Hls.ErrorTypes.NETWORK_ERROR:
+                  showError('Network error - trying to recover...');
+                  hls.startLoad();
+                  break;
+                case Hls.ErrorTypes.MEDIA_ERROR:
+                  showError('Media error - trying to recover...');
+                  hls.recoverMediaError();
+                  break;
+                default:
+                  showError('Fatal error loading stream');
+                  break;
+              }
+            }
+          });
+        } else {
+          showError('HLS is not supported in this browser');
+          hideLoading();
+        }
+      } catch (error) {
+        hideLoading();
+        console.error('Error loading stream:', error);
+        showError('Failed to load stream: ' + error.message);
+      }
+    }
+
+    // Initialize
+    async function initializePlayer() {
+      try {
+        const matchData = await fetchStreamData();
+
+        // Show match info
+        document.getElementById('matchTitle').textContent = matchData.title || 'Unknown Match';
+        document.getElementById('matchTournament').textContent = matchData.tournament || '';
+        document.getElementById('matchStatus').textContent = `Status: ${matchData.status || 'Unknown'}`;
+        document.getElementById('matchInfo').style.display = 'block';
+
+        // Check for streams
+        if (!matchData.auto_streams?.[0]?.auto) {
+          showError('No stream URL found for this match');
+          return;
+        }
+
+        // Extract ALL quality URLs
+        qualityUrls = extractAllQualityUrls(matchData.auto_streams[0].auto);
+
+        if (Object.keys(qualityUrls).length === 0) {
+          showError('No valid stream URLs found');
+          return;
+        }
+
+        console.log('Available qualities:', Object.keys(qualityUrls));
+
+        // Create quality buttons
+        createQualityButtons();
+
+        // Load the highest quality first
+        const qualities = Object.keys(qualityUrls).sort((a, b) => parseInt(b) - parseInt(a));
+        loadStream(qualityUrls[qualities[0]]);
+
+      } catch (error) {
+        hideLoading();
+        console.error('Initialization error:', error);
+        showError(error.message);
+      }
+    }
+
+    // Start
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!matchId) {
+        showError('Please provide a match ID (e.g., ?id=140797)');
+        return;
+      }
+      initializePlayer();
+    });
+  </script>
 <script>
 // alert('Join Our Telegram For More Live Links')
          if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
          window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
      }
 </script>
-
 </body>
