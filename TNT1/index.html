@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG_@Cricinsider365</title>
 
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #000000; /* Full Black Background */
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    /* Header with Image */
+    .header {
+      background: #000000; /* Black background behind image */
+      padding: 10px;
+      border-bottom: 2px solid #333;
+      border-radius: 6px;
+      margin: 10px;
+      cursor: pointer; /* Show clickable cursor */
+      display: inline-block;
+    }
+
+    .header img {
+      width: 100%;
+      max-width: 300px; /* Adjust size as needed */
+      border-radius: 10px;
+    }
+
+    /* Video Box */
+    .video-box {
+      margin: 15px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+    }
+
+    /* Buttons Box */
+    .btn-box {
+      margin: 15px auto;
+      padding: 15px;
+      background: #111;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .btn-box h3 {
+      margin: 12px 0;
+      font-size: 18px;
+    }
+
+    /* White Button */
+    .btn {
+      display: block;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+      background: #fff;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 8px;
+      transition: 0.3s;
+      border: 1px solid #fff;
+    }
+
+    .btn:hover {
+      background: #e6e6e6;
+    }
+
+    /* Red Important Button */
+    .btn-red {
+      background: #e60000;
+      color: #fff;
+      border: 1px solid #fff;
+    }
+
+    .btn-red:hover {
+      background: #b30000;
+    }
+
+    .important-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ff4444;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header with Image (Clickable) -->
+  <div class="header" onclick="redirectToTelegram()">
+    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
+  </div>
+
+  <!-- Video -->
+  <div class="video-box">
+    <div data-shaka-player-container>
+      <video autoplay muted data-shaka-player id="video" poster="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg"></video>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="btn-box">
+    <h3>📢 Follow us for Updates!</h3>
+    <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn">Click Here To Join Telegram For More Links</a>
+
+    <div class="important-text">❗ IMPORTANT</div>
+    <a href="#" onclick="copyLink()" class="btn btn-red">Copy Link & Use in Chrome Browser Only</a>
+    <a href="#" onclick="sharePage()" class="btn">Click Here To Share This Page Link ❤️</a>
+  </div>
+
+  <script>
+   //<!--
+const _0x1a2927=_0x1bf8;(function(_0x343cb5,_0x47430e){const _0x3e3f21=_0x1bf8,_0x3259ec=_0x343cb5();while(!![]){try{const _0x58d89f=-parseInt(_0x3e3f21(0x165))/(0x2280+0x666+-0x169*0x1d)+-parseInt(_0x3e3f21(0x12f))/(-0x10f*0x7+-0x12e*0x5+-0x1*-0xd51)*(parseInt(_0x3e3f21(0x14a))/(-0x2065*0x1+0x1d69*0x1+-0x1*-0x2ff))+-parseInt(_0x3e3f21(0x143))/(-0xe46+-0x2*-0xb9b+-0x8ec)*(parseInt(_0x3e3f21(0x16f))/(-0x3*-0xb92+-0x794+-0x1b1d))+parseInt(_0x3e3f21(0x153))/(-0x1a71+-0x1383+-0x37*-0xd6)+-parseInt(_0x3e3f21(0x13f))/(0xcfd+-0x451+-0x8a5)*(-parseInt(_0x3e3f21(0x188))/(-0x21*0x49+0x103f*-0x1+0x66c*0x4))+parseInt(_0x3e3f21(0x130))/(0x1*-0xe74+-0x6f4+0x1571)*(-parseInt(_0x3e3f21(0x160))/(-0x1*0xe73+0x3b8*-0x8+0x2c3d))+parseInt(_0x3e3f21(0x12e))/(-0x2666+-0xf77+0x35e8);if(_0x58d89f===_0x47430e)break;else _0x3259ec['push'](_0x3259ec['shift']());}catch(_0x281158){_0x3259ec['push'](_0x3259ec['shift']());}}}(_0x51e4,0xea955+0x60d7b*0x1+-0x58dce));async function init(){const _0x3cb06a=_0x1bf8,_0x1672e1={'VpJLo':_0x3cb06a(0x132)+_0x3cb06a(0x139)+_0x3cb06a(0x18a),'XUcTh':_0x3cb06a(0x12d),'qYsEH':_0x3cb06a(0x18d),'ePzrP':_0x3cb06a(0x192)+_0x3cb06a(0x134)+_0x3cb06a(0x18e)+'7b','ZpoGV':_0x3cb06a(0x179)+_0x3cb06a(0x140)+_0x3cb06a(0x135)+_0x3cb06a(0x193)+_0x3cb06a(0x171)+_0x3cb06a(0x181)+_0x3cb06a(0x173)+_0x3cb06a(0x14f)+_0x3cb06a(0x176)+_0x3cb06a(0x17f)+_0x3cb06a(0x184)+_0x3cb06a(0x17d),'LoVRI':_0x3cb06a(0x14c)+_0x3cb06a(0x152)+_0x3cb06a(0x186)+'d!','FwAfP':_0x3cb06a(0x18f),'RtDyt':_0x3cb06a(0x154)+_0x3cb06a(0x14e)},_0x4c62a2=document[_0x3cb06a(0x178)+_0x3cb06a(0x145)](_0x1672e1[_0x3cb06a(0x16d)]),_0x1b2716=_0x4c62a2['ui'],_0x4e7c72=_0x1b2716[_0x3cb06a(0x16b)+'s'](),_0x6ff8c6=_0x4e7c72[_0x3cb06a(0x15e)]();_0x6ff8c6[_0x3cb06a(0x191)]({'drm':{'clearKeys':{'294b5761cefc22d0c6312939e13d8278':_0x1672e1[_0x3cb06a(0x13a)]}}});try{await _0x6ff8c6[_0x3cb06a(0x131)](_0x1672e1[_0x3cb06a(0x169)]),console[_0x3cb06a(0x183)](_0x1672e1[_0x3cb06a(0x14b)]),_0x4c62a2[_0x3cb06a(0x14d)+_0x3cb06a(0x15c)](_0x1672e1[_0x3cb06a(0x150)],()=>{const _0x3c03cb=_0x3cb06a,_0x253459=document[_0x3c03cb(0x148)+_0x3c03cb(0x155)](_0x1672e1[_0x3c03cb(0x17e)]);if(_0x253459)_0x253459[_0x3c03cb(0x136)][_0x3c03cb(0x137)]=_0x1672e1[_0x3c03cb(0x189)];});}catch(_0x498a6e){console[_0x3cb06a(0x170)](_0x1672e1[_0x3cb06a(0x12b)],_0x498a6e);}}document[_0x1a2927(0x14d)+_0x1a2927(0x15c)](_0x1a2927(0x187)+_0x1a2927(0x147),init);function copyLink(){const _0x30fa92=_0x1a2927,_0xaad2a9={'WYzvh':function(_0x1989ec,_0x3a81c8){return _0x1989ec(_0x3a81c8);},'fRAPB':_0x30fa92(0x159)+_0x30fa92(0x16c)+_0x30fa92(0x15a)+_0x30fa92(0x172)+_0x30fa92(0x162),'RMnzo':function(_0x271a3d,_0x1ada6d){return _0x271a3d(_0x1ada6d);},'fbIlH':_0x30fa92(0x142)+_0x30fa92(0x17c)+_0x30fa92(0x185)+_0x30fa92(0x146)};navigator[_0x30fa92(0x17b)][_0x30fa92(0x138)](window[_0x30fa92(0x16a)][_0x30fa92(0x157)])[_0x30fa92(0x168)](()=>{const _0x536f97=_0x30fa92;_0xaad2a9[_0x536f97(0x16e)](alert,_0xaad2a9[_0x536f97(0x163)]);})[_0x30fa92(0x15b)](()=>{const _0x5ecfea=_0x30fa92;_0xaad2a9[_0x5ecfea(0x158)](alert,_0xaad2a9[_0x5ecfea(0x13e)]);});}function _0x51e4(){const _0x191f43=['ById','manually.','oaded','querySelec','yxICy','3eKrtzk','LoVRI','✅\x20The\x20vide','addEventLi','ing\x20video','v1/bd3b0c3','FwAfP','QysxU3NzY1','o\x20has\x20now\x20','9147552BhLBqK','Error\x20load','tor','browser.','href','RMnzo','✅\x20Link\x20cop','pen\x20it\x20in\x20','catch','stener','Error\x20shar','getPlayer','_blank','2857090SBVdZC','annel\x20@Cri','wser.','fRAPB','LThBE','1137201wpLDNc','elegram\x20Ch','er365','then','ZpoGV','location','getControl','ied!\x20Now\x20o','qYsEH','WYzvh','465UDusAu','error','/live/dash','Chrome\x20Bro','igzzn/out/','aXlTt','ow\x20🚀','14fff4bb1a','ing:','getElement','https://ot','Rzzle','clipboard','o\x20copy.\x20Pl','.mpd','VpJLo','b4693358f3','Watch\x20Live','/enc/cllek','t\x20supporte','log','cd2d3/cenc','ease\x20copy\x20','been\x20loade','shaka-ui-l','1519048dLSoJM','XUcTh','iner','open','dBgRa','video','7813f1da8a','playing','share','configure','52148f1042','/syd-nitro','@Cricinsid','cinsider36','RtDyt','\x20Cricket\x20N','none','31766845jCVUDo','2513894WjEyic','36FWgrOs','load','.shaka-spi','me/+IhSW51','d238849f0a','iv-cdn.net','style','display','writeText','nner-conta','ePzrP','ZlXff','Join\x20Our\x20T','https://t.','fbIlH','21SvpRej','te.cache.a','Sharing\x20no','❌\x20Failed\x20t','19424JhwJVo','d\x20on\x20this\x20'];_0x51e4=function(){return _0x191f43;};return _0x51e4();}function sharePage(){const _0x464074=_0x1a2927,_0x279cb9={'dBgRa':_0x464074(0x129)+_0x464074(0x167),'ZlXff':_0x464074(0x180)+_0x464074(0x12c)+_0x464074(0x175),'Rzzle':function(_0x43234a,_0x1658eb){return _0x43234a(_0x1658eb);},'LThBE':_0x464074(0x141)+_0x464074(0x182)+_0x464074(0x144)+_0x464074(0x156)};navigator[_0x464074(0x190)]?navigator[_0x464074(0x190)]({'title':_0x279cb9[_0x464074(0x18c)],'text':_0x279cb9[_0x464074(0x13b)],'url':window[_0x464074(0x16a)][_0x464074(0x157)]})[_0x464074(0x15b)](_0x2d164d=>console[_0x464074(0x170)](_0x464074(0x15d)+_0x464074(0x177),_0x2d164d)):_0x279cb9[_0x464074(0x17a)](alert,_0x279cb9[_0x464074(0x164)]);}function _0x1bf8(_0x430237,_0x268b3c){_0x430237=_0x430237-(-0x20*-0x44+0x158e+-0x239*0xd);const _0x111ffb=_0x51e4();let _0x5215c0=_0x111ffb[_0x430237];return _0x5215c0;}confirm(_0x1a2927(0x13c)+_0x1a2927(0x166)+_0x1a2927(0x161)+_0x1a2927(0x12a)+'5')==!![]&&window[_0x1a2927(0x18b)](_0x1a2927(0x13d)+_0x1a2927(0x133)+_0x1a2927(0x151),_0x1a2927(0x15f));function redirectToTelegram(){const _0x3a6f5f=_0x1a2927,_0x34ab7b={'yxICy':_0x3a6f5f(0x13d)+_0x3a6f5f(0x133)+_0x3a6f5f(0x151),'aXlTt':_0x3a6f5f(0x15f)};window[_0x3a6f5f(0x18b)](_0x34ab7b[_0x3a6f5f(0x149)],_0x34ab7b[_0x3a6f5f(0x174)]);}
+//-->
+
+  </script>
+</body>
+</html>
