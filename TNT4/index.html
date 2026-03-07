@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG_@Cricinsider365</title>
 
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #000000; /* Full Black Background */
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    /* Header with Image */
+    .header {
+      background: #000000; /* Black background behind image */
+      padding: 10px;
+      border-bottom: 2px solid #333;
+      border-radius: 6px;
+      margin: 10px;
+      cursor: pointer; /* Show clickable cursor */
+      display: inline-block;
+    }
+
+    .header img {
+      width: 100%;
+      max-width: 300px; /* Adjust size as needed */
+      border-radius: 10px;
+    }
+
+    /* Video Box */
+    .video-box {
+      margin: 15px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+    }
+
+    /* Buttons Box */
+    .btn-box {
+      margin: 15px auto;
+      padding: 15px;
+      background: #111;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .btn-box h3 {
+      margin: 12px 0;
+      font-size: 18px;
+    }
+
+    /* White Button */
+    .btn {
+      display: block;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+      background: #fff;
+      padding: 14px;
+      margin: 10px 0;
+      border-radius: 8px;
+      transition: 0.3s;
+      border: 1px solid #fff;
+    }
+
+    .btn:hover {
+      background: #e6e6e6;
+    }
+
+    /* Red Important Button */
+    .btn-red {
+      background: #e60000;
+      color: #fff;
+      border: 1px solid #fff;
+    }
+
+    .btn-red:hover {
+      background: #b30000;
+    }
+
+    .important-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ff4444;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header with Image (Clickable) -->
+  <div class="header" onclick="redirectToTelegram()">
+    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
+  </div>
+
+  <!-- Video -->
+  <div class="video-box">
+    <div data-shaka-player-container>
+      <video autoplay muted data-shaka-player id="video" poster="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg"></video>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="btn-box">
+    <h3>📢 Follow us for Updates!</h3>
+    <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn">Click Here To Join Telegram For More Links</a>
+
+    <div class="important-text">❗ IMPORTANT</div>
+    <a href="#" onclick="copyLink()" class="btn btn-red">Copy Link & Use in Chrome Browser Only</a>
+    <a href="#" onclick="sharePage()" class="btn">Click Here To Share This Page Link ❤️</a>
+  </div>
+
+  <script>
+    async function init() {
+      const video = document.getElementById("video");
+      const ui = video.ui;
+      const controls = ui.getControls();
+      const player = controls.getPlayer();
+
+      player.configure({
+        drm: {
+          clearKeys: {
+            '192b1115da041585c77200128549efa1': "634e10efe4abbb14be400a3ccbac0258"
+          }
+        }
+      });
+
+      try {
+        await player.load("https://otte.cache.aiv-cdn.net/syd-nitro/live/dash/enc/pnu10tp36z/out/v1/912e9db56d75403b8a9ac0a719110f36/cenc.mpd");
+        console.log("✅ The video has now been loaded!");
+
+        video.addEventListener('playing', () => {
+          const spinner = document.querySelector('.shaka-spinner-container');
+          if (spinner) spinner.style.display = 'none';
+        });
+
+      } catch (error) {
+        console.error("Error loading video", error);
+      }
+    }
+
+    document.addEventListener("shaka-ui-loaded", init);
+
+    // Copy Link
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("✅ Link copied! Now open it in Chrome Browser.");
+      }).catch(() => {
+        alert("❌ Failed to copy. Please copy manually.");
+      });
+    }
+
+    // Share Page
+    function sharePage() {
+      if (navigator.share) {
+        navigator.share({
+          title: "@Cricinsider365",
+          text: "Watch Live Cricket Now 🚀",
+          url: window.location.href
+        }).catch((err) => console.error("Error sharing:", err));
+      } else {
+        alert("Sharing not supported on this browser.");
+      }
+    }
+
+    // Telegram Join Prompt
+    if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+      window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+    }
+
+    // Redirect when header is clicked
+    function redirectToTelegram() {
+      window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+    }
+  </script>
+</body>
+</html>
